@@ -1,0 +1,28 @@
+version: '3.5'
+services:
+  agent:
+    image: localhost:5050/partainer/agent
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /var/lib/docker/volumes:/var/lib/docker/volumes
+
+  portainer:
+    image: localhost:5050/partainer/portainer-ce
+    ports:
+        - "9000:9000"
+    command: -H unix:///var/run/docker.sock
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - portainer_data:/data
+
+  api:
+    image: localhost:5050/souckmi/zp_test
+    container_name: uloha_api
+    ports: 
+      - "5000:5000"
+    volumes:
+      - C:\Users\mispu\School\2_semestr\Tvorba_biomedicinskych_aplikaci\ZPTestTBA\api/datafiles:/app/app/data
+
+
+volumes:
+    portainer_data:

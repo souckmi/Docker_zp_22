@@ -1,0 +1,50 @@
+#Uloha3
+
+docker build -t zptest_souckova:latest .
+docker run -p 5000:5000 --name ZPsouckova -it zptest_souckova:latest
+
+#Uloha4
+
+docker build -t souckmi/zp_test .
+docker push souckmi/zp_test
+
+#Uloha5
+
+docker system prune -a
+docker pull souckmi/zp_test
+docker run -it -p 5000:5000 -v <cesta k projektu>/datafiles:/app/app/data souckmi/zp_test
+
+#Uloha6
+
+docker compose up
+
+#Uloha7
+
+docker pull registry
+docker image save -o myRegistry.tar registry
+docker image load -i myRegistry.tar
+docker run -d -p 5050:5000 --name registry registry
+
+docker pull portainer/agent
+docker image save -o portaineragent.tar portainer/agent
+docker image load -i portaineragent.tar
+docker image tag portainer/agent localhost:5050/partainer/agent
+docker push localhost:5050/partainer/agent
+
+docker pull portainer/portainer-ce
+docker image save -o portainerportainerce.tar portainer/portainer-ce
+docker image load -i portainerportainerce.tar
+docker image tag portainer/portainer-ce localhost:5050/partainer/portainer-ce
+docker push localhost:5050/partainer/portainer-ce
+
+docker image save -o souckmizptest.tar souckmi/zp_test
+docker image load -i souckmizptest.tar
+docker image tag souckmi/zp_test localhost:5050/souckmi/zp_test
+docker push localhost:5050/souckmi/zp_test
+
+docker-compose -f docker-compose-reg.yml up
+
+#Uloha8
+
+docker swarm init
+docker stack deploy --compose-file docker-compose-swarm.yml trabant
